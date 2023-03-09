@@ -19,6 +19,13 @@ a {
     -webkit-text-decoration-skip: objects;
 }
 
+.enllaç {
+    color: #357E51;
+    text-decoration: underline;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}
+
 .card-selector{
     background-color: #f8f8f8;
 }

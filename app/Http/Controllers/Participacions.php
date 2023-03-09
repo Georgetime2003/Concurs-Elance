@@ -12,13 +12,13 @@ class participacions extends Controller
 {
     public function import(Request $request)
     {
-        // $file = $request->file('file');
-        $file = public_path('participacions.csv');
+        $file = $request->file('file');
         $csvData = file_get_contents($file);
         $rows = array_map('str_getcsv', explode("\n", $csvData));
         $header = array_shift($rows);
         $csv = array();
         $duetprepro = false;
+        $timestamp = time();
         foreach ($rows as $row) {
             $csv[] = array_combine($header, $row);
         }
@@ -105,9 +105,25 @@ class participacions extends Controller
                     'grup_id' => $grupId->id,
                 ]);
             } catch (\Exception $e) {
-                dd($e, $row);
+                revertirCanvis($timestamp);
+                return view('importacio')->with('error', $e->getMessage());
             }
         }
-        return view('index');
+        return view('importacio')->with('success', 'Importació realitzada correctament');
+    }
+}
+
+function revertirCanvis($timestamp) {
+    $participacions = ParticipacionsModel::where('created_at', '>=', $timestamp)->get();
+    foreach ($participacions as $participacio) {
+        $participacio->delete();
+    }
+    $participants = ParticipantsModel::where('created_at', '>=', $timestamp)->get();
+    foreach ($participants as $participant) {
+        $participant->delete();
+    }
+    $grups = GrupsModel::where('created_at', '>=', $timestamp)->get();
+    foreach ($grups as $grup) {
+        $grup->delete();
     }
 }
