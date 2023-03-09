@@ -43,3 +43,9 @@ Route::get('/images/{filename}', function ($filename)
 Route::get('inici', function() {
     return view('dashboard');
 })->name('inici');
+
+Route::get('importacio', function() {
+    return view('importacio');
+})->name('importacio');
+
+Route::post('importacio', [App\Http\Controllers\Participacions::class, 'import'])->name('importacio');
