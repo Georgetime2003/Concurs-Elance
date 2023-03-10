@@ -111,6 +111,23 @@ class participacions extends Controller
         }
         return view('importacio')->with('success', 'Importació realitzada correctament');
     }
+    public function indexparticipants(){
+        $participants = ParticipantsModel::all();
+        $categories = CategoriaModel::all();
+        $grups = GrupsModel::all();
+        return view('afegir', ['participants' => $participants], ['categories' => $categories], ['grups' => $grups]);
+    }
+
+    public function store(Request $request){
+        
+    }
+
+    public function obtenirGrups(Request $request){
+        //Obtenim els grups on la categoria coincideixi amb una participació
+        $grups = GrupsModel::whereHas('participacions', function($query) use ($request){
+            $query->where('categoria_id', $request->categoria_id);
+        })->get();
+        return response()->json($grups);    }
 }
 
 function revertirCanvis($timestamp) {
