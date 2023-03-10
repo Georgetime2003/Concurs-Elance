@@ -14,6 +14,7 @@ class AuthController extends Controller
      */
     public function login(Request $request){
         $credentials = $request->only('name', 'password');
+        //Validació de credencials
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if($user->jutge == 1){
