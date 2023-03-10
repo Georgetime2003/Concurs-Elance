@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h2 data-header="h1" class="title my-5">Concurs de dansa Elancé</h2>
+                <h2 data-header="h1" class="title my-5">Concurs de dansa Élancé</h2>
                 <div class="row">
                     <div class="card border-1 shadow rounded-3">
                         <div class="card-body p-4">

@@ -1,2 +1,2 @@
-# Concurs Elancé
-Aplicació Enfocada a la gestió del Concurs Elancé de Blanes
+# Concurs Élancé
+Aplicació Enfocada a la gestió del Concurs Élancé de Blanes

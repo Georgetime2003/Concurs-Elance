@@ -53,6 +53,15 @@ class participacions extends Controller
                 $categoria[3] = preg_replace('/[^0-9]/', '', $categoria[3]);
                 $categoria[3] = "C" . $categoria[3];
 
+                //Formatem Nombre i Apellidos
+                $row['Nombre'] = trim($row['Nombre']);
+                $row['Nombre'] = strtolower($row['Nombre']);
+                $row['Nombre'] = ucwords($row['Nombre']);
+
+                $row['Apellidos'] = trim($row['Apellidos']);
+                $row['Apellidos'] = strtolower($row['Apellidos']);
+                $row['Apellidos'] = ucwords($row['Apellidos']);
+
                 //Realitzem correccions de categories perquè coincideixin amb la base de dades
                 if ($categoria[0] == "Amater") {
                     $categoria[0] = "Amateur";
