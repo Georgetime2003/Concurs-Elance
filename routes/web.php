@@ -49,3 +49,5 @@ Route::get('importacio', function() {
 })->name('importacio');
 
 Route::post('importacio', [App\Http\Controllers\Participacions::class, 'import'])->name('importacio');
+
+Route::get('participants', [App\Http\Controllers\Participacions::class, 'indexparticipants'])->name('afegirParticipants');
