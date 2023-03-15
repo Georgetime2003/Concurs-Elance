@@ -57,10 +57,12 @@ class participacions extends Controller
                 $row['Nombre'] = trim($row['Nombre']);
                 $row['Nombre'] = strtolower($row['Nombre']);
                 $row['Nombre'] = ucwords($row['Nombre']);
+                $row['Nombre'] = mb_convert_case($row['Nombre'], MB_CASE_TITLE, "UTF-8");
 
                 $row['Apellidos'] = trim($row['Apellidos']);
                 $row['Apellidos'] = strtolower($row['Apellidos']);
                 $row['Apellidos'] = ucwords($row['Apellidos']);
+                $row['Apellidos'] = mb_convert_case($row['Apellidos'], MB_CASE_TITLE, "UTF-8");
 
                 //Realitzem correccions de categories perquè coincideixin amb la base de dades
                 if ($categoria[0] == "Amater") {
@@ -120,16 +122,122 @@ class participacions extends Controller
         }
         return view('importacio')->with('success', 'Importació realitzada correctament');
     }
-    public function indexparticipants(){
+    public function indexparticipants($success = null, $error = null){
         $participants = ParticipantsModel::all();
         $categories = CategoriaModel::all();
         $grups = GrupsModel::all();
-        return view('afegir', ['participants' => $participants], ['categories' => $categories], ['grups' => $grups]);
+        if (isset($success)){
+            echo $success;
+            // return view('afegir')->with('success', $success);
+        } else if (isset($error)){
+            echo $error;
+            // return view('afegir')->with('error', $error);
+        }
+        return view('afegir')->with('participants', $participants)->with('categories', $categories)->with('grups', $grups);
     }
 
     public function store(Request $request){
-        
+        try {
+        $idParticipant = $request->id;
+        $nom = $request->nomParticipant;
+        $cognoms = $request->cognoms;
+        $edat = $request->edat;
+
+        $nom = trim($nom);
+        $nom = strtolower($nom);
+        $nom = ucwords($nom);
+        $nom = mb_convert_case($nom, MB_CASE_TITLE, "UTF-8");
+
+        $cognoms = trim($cognoms);
+        $cognoms = strtolower($cognoms);
+        $cognoms = ucwords($cognoms);
+        $cognoms = mb_convert_case($cognoms, MB_CASE_TITLE, "UTF-8");
+
+        $categoria = $request->categoria;
+        $modalitat = $request->modalitat;
+        $estils = $request->estils;
+        $subcategoria = $request->subcategoria;
+
+        if ($categoria == 1){
+            $categoria = "Amateur";
+        } else if ($categoria == 2){
+            $categoria = "Pre-Professional";
+        } else {
+            throw new \Exception("Categoria no trobada");
+        }
+
+        if ($modalitat == 1){
+            $modalitat = "Solo";
+        } else if ($modalitat == 2){
+            if ($categoria == "Amateur"){
+                $modalitat = "Duos/Trios";
+            } else {
+                $modalitat = "Duet";
+            }
+        } else if ($modalitat == 3){
+            if ($categoria == "Amateur"){
+                $modalitat = "Grupal";
+            } else {
+                throw new \Exception("Modalitat no trobada");
+            }
+        } else {
+            throw new \Exception("Modalitat no trobada");
+        }
+
+        if ($estils == 1) {
+            $estils = "Clàssic";
+        } else if ($estils == 2) {
+            $estils = "Contemporani";
+        } else if ($estils == 3) {
+            if ($categoria == "Amateur"){
+                $estils = "Fusió";
+            } else {
+                $estils = "Dues Variacions";
+            }
+        } else if ($estils == 4) {
+            if ($categoria == "Amateur"){
+                $estils = "Jazz";
+            } else {
+                throw new \Exception("Estil no trobat");
+            }
+        }
+
+        $nSubcategoria = (intval($subcategoria));
+        $nSubcategoria--;
+        $subcategoria = "C" . $nSubcategoria;
+
+        $idCategoria = CategoriaModel::where('categoria', $categoria)->where('modalitat', $modalitat)->where('estils', $estils)->where('subcategoria', $subcategoria)->first()->id;
+
+        $idGrup = $request->idGrup;
+        $nomGrup = $request->nomGrup;
+
+        if ($idGrup == "" || GrupsModel::where('id', $idGrup)->first()->nomgrup != $nomGrup) {
+            GrupsModel::create([
+                'nomgrup' => $nomGrup,
+                'descripcio' => $nomGrup,
+            ]);
+            $idGrup = GrupsModel::where('nomgrup', $nomGrup)->first()->id;
+        }
+
+        if ($idParticipant == "" || ParticipantsModel::where('nom', $nom)->where('cognoms', $cognoms)->first() != $idParticipant) {
+            ParticipantsModel::create([
+                'nom' => $nom,
+                'cognoms' => $cognoms,
+                'edat' => $edat,
+            ]);
+            $idParticipant = ParticipantsModel::where('nom', $nom)->where('cognoms', $cognoms)->first()->id;
+        }
+
+        ParticipacionsModel::create([
+            'participant_id' => $idParticipant,
+            'categoria_id' => $idCategoria,
+            'grup_id' => $idGrup,
+        ]);
+        return view('afegir')->with('success', 'Participant afegit correctament')->with('participants', ParticipantsModel::all())->with('categories', CategoriaModel::all())->with('grups', GrupsModel::all());
+    } catch (\Exception $e) {
+        return view('afegir')->with('error', $e->getMessage() . " " . $e->getLine())->with('participants', ParticipantsModel::all())->with('categories', CategoriaModel::all())->with('grups', GrupsModel::all());
     }
+}
 
     public function obtenirGrups(Request $request){
         //Obtenim els grups on la categoria coincideixi amb una participació
@@ -137,6 +245,12 @@ class participacions extends Controller
             $query->where('categoria_id', $request->categoria_id);
         })->get();
         return response()->json($grups);    }
+
+    public function view(){
+        //Participacions amb joins de categories i grups
+        $participacions = ParticipacionsModel::with('participants')->with('grups')->with('categories')->get();
+        return view('veureParticipants')->with('participacions', $participacions);
+    }
 }
 
 function revertirCanvis($timestamp) {

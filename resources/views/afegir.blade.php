@@ -1,45 +1,6 @@
 @extends('layout')
 @section('header')
-<script>
-    window.onload = function() {
-        $('#fitxerCSV').on('change', function() {
-            if ($(this).val() == '') {
-                $('button').prop('disabled', true);
-            } else {
-                if ($(this).val().split('.').pop().toLowerCase() != 'csv') {
-                    alert('El fitxer no és un .csv');
-                    $('button').prop('disabled', true);
-                    $(this).val('');
-                } else{
-                    $('button').prop('disabled', false);
-                }
-            }
-        });
-        $('.toast').toast({delay: 50000});
-        $('.toast').toast('show');
-        $('#nom').on('change', function(){
-            if ($.isNumeric($(this).val())) {
-                $('#idParticipant').val($(this).val());
-                let nom = $('#noms option[value="' + $(this).val() + '"]').text();
-                let cognoms = nom.split(' ');
-                let id = $(this).val();
-                $('#nom').val(cognoms[0]);
-                $('#cognoms').val('')
-                for (let i = 1; i < cognoms.length; i++) {
-                    $('#cognoms').val($('#cognoms').val() + cognoms[i] + ' ');
-                }
-                let opcions = $('#noms option');
-                let edat;
-                for (let i = 0; i < opcions.length; i++) {
-                    if (opcions[i].value == id) {
-                        edat = $(opcions[i]).attr('data-edat');
-                    }
-                }
-                $('#edat').val(edat);
-            }
-        })
-    }
-</script>
+<script src="{{asset('js/afegir.js')}}"></script>
 
 @endsection
 
@@ -71,7 +32,7 @@
                 <div class="row">
                     <div class="card border-1 shadow rounded-3">
                         <div class="card-body p-4">
-                            <form action="{{route ('importacio')}}" method="post" enctype="multipart/form-data">
+                            <form action="{{route ('afegirParticipants')}}" method="post" enctype="multipart/form-data">
                                 <input type="number" name="id" id="idParticipant" hidden>
                                 @csrf
                                 <div class="row">
@@ -79,13 +40,12 @@
                                         <h3 data-header="h2">Dades Participant</h3>
                                     </div>
                                     <p/>
-                                    <p/>
                                     <div class="col-4">
                                         <label for="nom" class="form-label">Nom</label>
-                                        <input list="noms" class="form-control" id="nom">
+                                        <input list="noms" class="form-control" id="nom" name="nomParticipant">
                                             <datalist id="noms">
                                                 @foreach ($participants as $participant)
-                                                    <option value="{{$participant->id}}" data-edat="{{$participant->edat}}">{{$participant->nom}} {{$participant->cognoms}}</option>
+                                                    <option value="{{$participant->id}}" data-edat="{{$participant->edat}}">{{$participant->nom}}, {{$participant->cognoms}}</option>
                                                 @endforeach
                                             </datalist>
                                     </div>
@@ -103,7 +63,46 @@
                                         <h3 data-header="h2">Categoria Participant</h3>
                                     </div>
                                     <p/>
-                                    <p/>
+                                    <div class="col-3">
+                                        <label for="categoria" class="form-label">Categoria</label>
+                                        <select name="categoria" id="categoria" class="form-select" required>
+                                            <option value="0">Selecciona una opció</option>
+                                            <option value="1">Amateur</option>
+                                            <option value="2">Pre-Professional</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="modalitat" class="form-label">Modalitat</label>
+                                        <select name="modalitat" id="modalitat" class="form-select" required disabled>
+                                            <option value="0" default>Selecciona una categoria</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="estils" class="form-label">Estils</label>
+                                        <select name="estils" id="estils" class="form-select" required disabled>
+                                            <option value="0" default>Selecciona una Modalitat</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="subcategoria" class="form-label">Sub-Categoria</label>
+                                        <select name="subcategoria" id="subcategoria" class="form-select" required disabled>
+                                            <option value="0" default>Selecciona un Estil</option>
+                                        </select>
+                                    </div>
+                                    </p>
+                                    <div class="col-12">
+                                        <input name="idGrup" id="idGrup" hidden>
+                                        <label for="nomGrup" class="form-label">Nom Grup</label>
+                                        <input list="grups" class="form-control" id="nomGrup" name="nomGrup">
+                                        <datalist id="grups">
+                                            @foreach ($grups as $grup)
+                                                <option value="{{$grup->id}}">{{$grup->nomgrup}}</option>
+                                            @endforeach
+                                        </datalist>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" id="submit" class="btn btn-primary mt-3" disabled>Afegir</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>

@@ -12,6 +12,22 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/brands.css')}}" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/solid.css')}}" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/fontawesome.css')}}" rel="stylesheet">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/apple-touch.icon.png') }}">
+<script>
+        if (navigator.userAgent.match(/Android/i)) {
+            window.scrollTo(0,0); // reset in case prev not scrolled  
+            var nPageH = $(document).height();
+            var nViewH = window.outerHeight;
+            if (nViewH > nPageH) {
+              nViewH -= 250;
+              $('BODY').css('height',nViewH + 'px');
+            }
+            window.scrollTo(0,1);
+        }
+    </script>
     @yield('header')
 </head>
 <body>
