@@ -246,9 +246,19 @@ class participacions extends Controller
         })->get();
         return response()->json($grups);    }
 
-    public function view(){
+    public function view($ordre = null, $tipus = null){
+        if ($ordre == null){
+            $participacions = ParticipacionsModel::with('participants')->with('grups')->with('categories')->get();
+        } else {
+            $llistaOrdre = ["nom", "cognoms", "edat", "categoria", "modalitat", "estils", "subcategoria", "nomgrup", "idgrup"];
+            $participacions = ParticipacionsModel::with('participants')->with('grups')->with('categories')->get();
+            if ($tipus == "asc"){
+                $participacions = $participacions->sortBy($llistaOrdre[$ordre]);
+            } else {
+                $participacions = $participacions->sortByDesc($llistaOrdre[$ordre]);
+            }
+        }
         //Participacions amb joins de categories i grups
-        $participacions = ParticipacionsModel::with('participants')->with('grups')->with('categories')->get();
         return view('veureParticipants')->with('participacions', $participacions);
     }
 }

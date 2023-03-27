@@ -46,7 +46,7 @@
                                     </a>
                                 </div>
                                 <div class="col-4 -top-3">
-                                    <a href="{{-- {{route('importar')}} --}}">
+                                    <a href="{{route('blocs')}}">
                                     <div class="card card-selector border-0 shadow rounded-3 my-5">
                                         <div class="card-body p-4">
                                             <i class="fa-solid icones fa-arrow-down-1-9 fa-2xl" ></i>  <span class="offset-1">Gestionar Blocs</span>
@@ -55,7 +55,7 @@
                                     </a>
                                 </div>
                                 <div class="col-4 -top-3">
-                                    <a href="{{-- {{route('importar')}} --}}">
+                                    <a href="{{route('crearJutges')}}">
                                     <div class="card card-selector border-0 shadow rounded-3 my-5">
                                         <div class="card-body p-4">
                                             <i class="fa-solid icones fa-users fa-2xl" ></i>  <span class="offset-1">Crear Jutges</span>

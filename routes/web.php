@@ -53,4 +53,16 @@ Route::post('importacio', [App\Http\Controllers\Participacions::class, 'import']
 Route::get('participants', [App\Http\Controllers\Participacions::class, 'indexparticipants'])->name('afegirParticipants');
 Route::post('participants', [App\Http\Controllers\Participacions::class, 'store'])->name('afegirParticipants');
 
-Route::get('veureparticipants', [App\Http\Controllers\Participacions::class, 'view'])->name('veureParticipants');
+Route::get('veureparticipants/', [App\Http\Controllers\Participacions::class, 'view'])->name('veureParticipants');
+/* Route::get('veureparticipants/{ordre}/{tipus}', [App\Http\Controllers\Participacions::class, 'view'])->name('veureParticipants'); */
+
+Route::get('crearJutges', [App\Http\Controllers\Jutges::class, 'index'])->name('crearJutges');
+Route::post('crearJutges', [App\Http\Controllers\Jutges::class, 'crearJutges'])->name('crearJutges');
+
+Route::get('blocs', function() {
+    return view('Blocs');
+})->name('blocs');
+
+Route::post('obtenirBlocs', [App\Http\Controllers\Blocs::class, 'index'])->name('obtenirBlocs');
+Route::post('crearBloc', [App\Http\Controllers\Blocs::class, 'crearBloc'])->name('crearBloc');
+Route::post('mostrarBloc', [App\Http\Controllers\Blocs::class, 'mostrarBloc'])->name('mostrarBloc');

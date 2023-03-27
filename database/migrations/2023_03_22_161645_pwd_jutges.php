@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blocs', function (Blueprint $table) {
+        Schema::create('pwd', function (Blueprint $table) {
             $table->id();
-            $table->integer('jurats')->nullable();
-            $table->foreignId('categoria_id')->nullable()->constrained('categories');
-            $table->boolean('actiu')->default(false);
-            $table->timestamps();
+            $table->string('user_id');
+            $table->string('pwd');
         });
     }
 
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blocs');
+        Schema::dropIfExists('pwd');
     }
 };
