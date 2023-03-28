@@ -16,7 +16,7 @@ class Jutges extends Controller
             $jutges = $request->input('nJutges');
                 for ($i = 0; $i < $jutges; $i++) {
                     $user = new User();
-                    $user->name = 'Jutge ' . ($i + 1);
+                    $user->name = 'jutge' . ($i + 1);
                     $user->password = bcrypt('jutge' . ($i + 1));
                     $user->jutge = 1;
                     $user->save();
