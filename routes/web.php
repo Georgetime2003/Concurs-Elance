@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::post('login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 
-Route::post('participacions', [App\Http\Controllers\Participacions::class, 'import'])->name('participacions');
+Route::post('participacions', [App\Http\Controllers\Participacions::class, 'import'])->middleware('auth')->middleware('controlJutge')->name('participacions');
 //Carpeta images
 Route::get('/images/{filename}', function ($filename)
 {
@@ -42,27 +42,29 @@ Route::get('/images/{filename}', function ($filename)
 
 Route::get('inici', function() {
     return view('dashboard');
-})->name('inici');
+})->middleware('auth')->middleware('controlJutge')->name('inici');
 
 Route::get('importacio', function() {
     return view('importacio');
-})->name('importacio');
+})->middleware('auth')->middleware('controlJutge')->name('importacio');
 
-Route::post('importacio', [App\Http\Controllers\Participacions::class, 'import'])->name('importacio');
+Route::post('importacio', [App\Http\Controllers\Participacions::class, 'import'])->middleware('auth')->middleware('controlJutge')->name('importacio');
 
-Route::get('participants', [App\Http\Controllers\Participacions::class, 'indexparticipants'])->name('afegirParticipants');
-Route::post('participants', [App\Http\Controllers\Participacions::class, 'store'])->name('afegirParticipants');
+Route::get('participants', [App\Http\Controllers\Participacions::class, 'indexparticipants'])->middleware('auth')->middleware('controlJutge')->name('afegirParticipants');
+Route::post('participants', [App\Http\Controllers\Participacions::class, 'store'])->middleware('auth')->middleware('controlJutge')->name('afegirParticipants');
 
-Route::get('veureparticipants/', [App\Http\Controllers\Participacions::class, 'view'])->name('veureParticipants');
+Route::get('veureparticipants/', [App\Http\Controllers\Participacions::class, 'view'])->middleware('auth')->middleware('controlJutge')->name('veureParticipants');
 /* Route::get('veureparticipants/{ordre}/{tipus}', [App\Http\Controllers\Participacions::class, 'view'])->name('veureParticipants'); */
 
-Route::get('crearJutges', [App\Http\Controllers\Jutges::class, 'index'])->name('crearJutges');
-Route::post('crearJutges', [App\Http\Controllers\Jutges::class, 'crearJutges'])->name('crearJutges');
+Route::get('crearJutges', [App\Http\Controllers\Jutges::class, 'index'])->middleware('auth')->middleware('controlJutge')->name('crearJutges');
+Route::post('crearJutges', [App\Http\Controllers\Jutges::class, 'crearJutges'])->middleware('auth')->middleware('controlJutge')->name('crearJutges');
 
 Route::get('blocs', function() {
     return view('Blocs');
-})->name('blocs');
+})->middleware('auth')->middleware('controlJutge')->name('blocs');
 
-Route::post('obtenirBlocs', [App\Http\Controllers\Blocs::class, 'index'])->name('obtenirBlocs');
-Route::post('crearBloc', [App\Http\Controllers\Blocs::class, 'crearBloc'])->name('crearBloc');
-Route::post('mostrarBloc', [App\Http\Controllers\Blocs::class, 'mostrarBloc'])->name('mostrarBloc');
+Route::post('obtenirBlocs', [App\Http\Controllers\Blocs::class, 'index'])->middleware('auth')->middleware('controlJutge')->name('obtenirBlocs');
+Route::post('crearBloc', [App\Http\Controllers\Blocs::class, 'crearBloc'])->middleware('auth')->middleware('controlJutge')->name('crearBloc');
+Route::post('mostrarBloc', [App\Http\Controllers\Blocs::class, 'mostrarBloc'])->middleware('auth')->middleware('controlJutge')->name('mostrarBloc');
+
+Route::get('votacions', [App\Http\Controllers\Jutges::class, 'votacionsIndex'])->middleware('auth')->name('votacions');

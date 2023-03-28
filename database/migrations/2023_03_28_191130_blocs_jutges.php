@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blocs', function (Blueprint $table) {
+        Schema::create('blocs_jutges', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('categoria_id')->nullable()->constrained('categories');
-            $table->boolean('actiu')->default(false);
-            $table->integer('num_participants')->nullable();
+            $table->foreignId('bloc_id')->constrained('blocs');
+            $table->foreignId('jutge_id')->constrained('users');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blocs');
+        Schema::dropIfExists('blocs_jutges');
     }
 };

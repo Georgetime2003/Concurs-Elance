@@ -18,11 +18,11 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if($user->jutge == 1){
-                return redirect()->route('jutges');
+                return redirect()->route('votacions');
             } else {
                 return redirect()->route('inici');
             }
-            return dd($user);
+            // return dd($user);
         }
         return redirect()->route('index')->with('error', 'El Usuari o contrasenya incorrectes');
     }

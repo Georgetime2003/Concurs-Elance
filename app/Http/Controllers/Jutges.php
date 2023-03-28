@@ -36,4 +36,8 @@ class Jutges extends Controller
             return view('crearJutges', ['jutges' => $jutges]);
         }
     }
+
+    public function votacionsIndex(){
+        return view('votacions');
+    }
 }
