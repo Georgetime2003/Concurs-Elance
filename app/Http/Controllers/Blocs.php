@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blocs as ModelBlocs;
 use App\Models\Categoria as ModelCategoria;
+use App\Models\Participacions as ModelParticipacions;
 use App\Models\User as ModelJutges;
 use Exception;
 
@@ -36,5 +37,12 @@ class Blocs extends Controller
         }catch(Exception $e){
             return response()->json($$bloc, 500);
         }
+    }
+
+    public function obtenirBlocsActius(Request $request){
+        $idJutge = $request->id;
+        $blocs = ModelBlocs::where('jurats', 'like', '%'.$idJutge.'%')->get();
+        $participacions = ModelParticipacions::where('categoria_id', '=', $blocs[0]->categoria_id)->get();
+        
     }
 }
