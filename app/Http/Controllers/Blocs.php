@@ -7,6 +7,7 @@ use App\Models\Blocs as ModelBlocs;
 use App\Models\Categoria as ModelCategoria;
 use App\Models\Participacions as ModelParticipacions;
 use App\Models\User as ModelJutges;
+use App\Models\Blocs_Jutges as ModelBlocs_Jutges;
 use Exception;
 
 class Blocs extends Controller
@@ -41,8 +42,13 @@ class Blocs extends Controller
 
     public function obtenirBlocsActius(Request $request){
         $idJutge = $request->id;
-        $blocs = ModelBlocs::where('jurats', 'like', '%'.$idJutge.'%')->get();
-        $participacions = ModelParticipacions::where('categoria_id', '=', $blocs[0]->categoria_id)->get();
-        
+        $blocs = ModelBlocs::all();
+        $blocsActius = [];
+        foreach($blocs as $bloc){
+            $blocJutge = ModelBlocs_Jutges::where('bloc_id', $bloc->id)->where('jutge_id', $idJutge)->where('actiu', 1)->first();
+            if($blocJutge != null){
+                $blocsActius[] = $bloc;
+            }
+        }
     }
 }
