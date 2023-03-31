@@ -66,5 +66,7 @@ Route::get('blocs', function() {
 Route::post('obtenirBlocs', [App\Http\Controllers\Blocs::class, 'index'])->middleware('auth')->middleware('controlJutge')->name('obtenirBlocs');
 Route::post('crearBloc', [App\Http\Controllers\Blocs::class, 'crearBloc'])->middleware('auth')->middleware('controlJutge')->name('crearBloc');
 Route::post('mostrarBloc', [App\Http\Controllers\Blocs::class, 'mostrarBloc'])->middleware('auth')->middleware('controlJutge')->name('mostrarBloc');
+Route::post('esborrarBloc', [App\Http\Controllers\Blocs::class, 'esborrarBloc'])->middleware('auth')->middleware('controlJutge')->name('esborrarBloc');
 
 Route::get('votacions', [App\Http\Controllers\Jutges::class, 'votacionsIndex'])->middleware('auth')->name('votacions');
+Route::post('obtenirBlocsActius', [App\Http\Controllers\Blocs::class, 'obtenirBlocsActius'])->name('obtenirBlocsActius');

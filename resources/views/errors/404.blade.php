@@ -19,7 +19,7 @@
                             </div>
                             <p/>
                             <div class="col-12">
-                                <a href="inici" class="btn btn-primary">Torna a l'inici</a>
+                                <a href="/inici" class="btn btn-primary">Torna a l'inici</a>
                             </div>
                         </div>
                     </div>

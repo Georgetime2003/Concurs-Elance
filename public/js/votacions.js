@@ -12,7 +12,8 @@ window.onload = function() {
             id: $("#idUsuari").val()
         },
         success: function (data) {
-            blocs.setBlocs(data);
+            // blocs.setBlocs(data);
+            console.log(data);
         }
     });
 }
