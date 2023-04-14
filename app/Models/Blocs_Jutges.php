@@ -12,6 +12,7 @@ class Blocs_Jutges extends Model
     protected $fillable = [
         'bloc_id',
         'jutge_id',
+        'posicio'
     ];
 
     public function bloc(){

@@ -32,12 +32,12 @@ return new class extends Migration
         DB::table('sistema_puntuacio')->insert([
             ['nom' => 'Tècnica'],
             ['nom' => 'Musicalitat'],
-            ['nom' => 'Expressivitat i Comunicacio'],
-            ['nom' => 'Us de l\'espai'],
+            ['nom' => 'Expressivitat i Comunicació'],
+            ['nom' => 'Ús de l\'espai'],
             ['nom' => 'Coreografia'],
             ['nom' => 'Complicitat'],
-            ['nom' => 'Cohesio de Grup'],
-            ['nom' => 'Comunicacio i expressivitat'],
+            ['nom' => 'Cohesió de Grup'],
+            ['nom' => 'Comunicació i expressivitat'],
             ['nom' => 'Virtuosisme'],
         ]);
     }

@@ -20,9 +20,16 @@ class Blocs extends Controller
     public function crearBloc(){
         $length = ModelBlocs::all()->count();
         $blocs = new ModelBlocs();
-        $blocs->id = $length + 1;
+        $blocs->nom = "Bloc " . ($length + 1);
         $blocs->categoria_id = null;
         $blocs->save();
+        for ($i = 0; $i < 3; ++ $i){
+            $bloc_jutges = new ModelBlocs_Jutges();
+            $bloc_jutges->bloc_id = $blocs->id;
+            $bloc_jutges->posicio = $i;
+            $bloc_jutges->jutge_id = null;
+            $bloc_jutges->save();
+        }
         $blocs = ModelBlocs::all();
         return response()->json($blocs, 200);
     }

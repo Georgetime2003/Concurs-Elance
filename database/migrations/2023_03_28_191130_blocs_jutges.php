@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('blocs_jutges', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bloc_id')->constrained('blocs');
-            $table->foreignId('jutge_id')->constrained('users');
+            $table->integer('posicio')->nullable();
+            $table->foreignId('jutge_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

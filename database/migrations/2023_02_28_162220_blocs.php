@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('blocs', function (Blueprint $table) {
             $table->id();
+            $table->string('nom')->nullable();
             $table->foreignId('categoria_id')->nullable()->constrained('categories');
             $table->boolean('actiu')->default(false);
             $table->integer('num_participants')->nullable();
