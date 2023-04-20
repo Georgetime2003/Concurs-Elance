@@ -4,6 +4,7 @@ var toastError = toastList[1];
 var toastSuccess = toastList[0];
 
 var blocs;
+var jutges;
 window.onload = function () {
     blocs = new Blocs();
     $('#categoria').attr('disabled', true);
@@ -211,6 +212,26 @@ function obtenirBlocs() {
     });
 }
 
+function obtenirJutges() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    return $.ajax({
+        url: '/jutgesBlocs',
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            jutges = data;
+        },
+        error: function (data) {
+            //Add wait time for toast while it is shown
+            toastError.show();
+        }
+    });
+}
+
 function crearBloc() {
     $.ajaxSetup({
         headers: {
@@ -286,6 +307,34 @@ function mostrarDadesBloc(data) {
                     comprovaSubcategoria(data.categoria.subcategoria);
                 }
             }
+        }
+        if (data.jutges[0].jutge_id != null){
+            $('#jutge1').val(data.jutges[0].jutge_id).change();
+            $('#jutge1').attr('disabled', false);
+        } else {
+            $('#jutge1').val(0).change();
+            $('#jutge1').attr('disabled', false);
+        }
+        if (data.jutges[1].jutge_id != null){
+            $('#jutge2').val(data.jutges[1].jutge_id).change();
+            $('#jutge2').attr('disabled', false);
+        } else {
+            $('#jutge2').val(0).change();
+            $('#jutge2').attr('disabled', true);
+        }
+        if (data.jutges[2].jutge_id != null){
+            $('#jutge3').val(data.jutges[2].jutge_id).change();
+            $('#jutge3').attr('disabled', false);
+        } else {
+            $('#jutge3').val(0).change();
+            $('#jutge3').attr('disabled', true);
+        }
+        if (data.actiu == 1){
+            $('#actiu').click(activarBloc);
+            $('#actiu').prop('checked', true);
+        } else {
+            $('#actiu').click(activarBloc);
+            $('#actiu').prop('checked', false);
         }
     }, 1);
     $('#titolBloc').attr('contenteditable', true);
@@ -390,4 +439,65 @@ function comprovaSubcategoria(subcategoria){
     } else if (subcategoria == "C5"){
         $('#subcategoria').val(6).change();
     }
+}
+
+function activarBloc(){
+    if ($('#actiu').prop('checked') == false){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '/desactivarBloc',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: $('#idBloc').val()
+            },
+            success: function (data) {
+                document.getElementById('textCorrecte').innerHTML = data.data;
+                toastSuccess.show();
+            }
+        });
+    } else {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '/activarBloc',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: $('#idBloc').val()
+            },
+            success: function (data) {
+                document.getElementById('textCorrecte').innerHTML = data.data;
+                toastSuccess.show();
+            }
+        });
+    }
+}
+function assignarJutge(pos, id){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: '/assignarJutge',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            id: $('#idBloc').val(),
+            pos: pos,
+            jutge: id
+        },
+        success: function (data) {
+            document.getElementById('textCorrecte').innerHTML = data.data;
+            toastSuccess.show();
+        }
+    });
 }

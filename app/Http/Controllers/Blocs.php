@@ -8,6 +8,7 @@ use App\Models\Categoria as ModelCategoria;
 use App\Models\Participacions as ModelParticipacions;
 use App\Models\User as ModelJutges;
 use App\Models\Blocs_Jutges as ModelBlocs_Jutges;
+use Dflydev\DotAccessData\Data;
 use Exception;
 
 class Blocs extends Controller
@@ -132,5 +133,27 @@ class Blocs extends Controller
         $idCategoria = ModelCategoria::where('categoria', $categoria)->where('modalitat', $modalitat)->where('estils', $estils)->where('subcategoria', $subcategoria)->first()->id;
 
         return $idCategoria;
+    }
+
+    public function activarBloc(Request $request){
+        $bloc = ModelBlocs::find($request->id);
+        $bloc->actiu = 1;
+        $bloc->save();
+        $response = [
+            "success" => true,
+            "data" => "S'ha habilitat el bloc"
+        ];
+        return response()->json($response, 200);
+    }
+    
+    public function desactivarBloc(Request $request){
+        $bloc = ModelBlocs::find($request->id);
+        $bloc->actiu = 0;
+        $bloc->save();
+        $response = [
+            "success" => true,
+            "data" => "S'ha deshabilitat el bloc"
+        ];
+        return response()->json($response, 200);
     }
 }

@@ -29,7 +29,7 @@ class Jutges extends Controller
     }
 
     public function index(){
-        $jutges = User::where('jutge', '>', 0)->get();
+        $jutges = User::where('jutge', '=', 1)->get();
         if (count($jutges) == 0) {
             return view('crearJutges');
         } else {
@@ -39,5 +39,10 @@ class Jutges extends Controller
 
     public function votacionsIndex(){
         return view('votacions');
+    }
+
+    public function obtenirJutges(){
+        $jutges = User::where('jutge', '=', 1)->get();
+        return response()->json($jutges);
     }
 }
