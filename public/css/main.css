@@ -1,6 +1,6 @@
 .bg-image {
     background-image: url("/images/fons.jpg");
-    position: relatidve;
+    position: relative;
     overflow: hidden;
     background-repeat: no-repeat;
     background-size: cover;
