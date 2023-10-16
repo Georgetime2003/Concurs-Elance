@@ -5,7 +5,10 @@ var toastSuccess = toastList[0];
 
 var blocs;
 var jutges;
+
+var timeInit = false;
 window.onload = function () {
+    obtenirJutges();
     blocs = new Blocs();
     $('#categoria').attr('disabled', true);
     $('#estils').attr('disabled', true);
@@ -19,6 +22,19 @@ window.onload = function () {
     toastSuccess.show();
     Promise.resolve(obtenirBlocs()).then(function () {
         blocs.init();
+        timeInit = true;
+        countDown();
+    });
+    $("#jutge1").on("change", function () {
+        let val = $(this).val();
+        assignarJutge(1, val);
+    });
+    $("#jutge2").on("change", function () {
+        let val = $(this).val();
+        assignarJutge(2, val);
+    });
+    $("#jutge3").on("change", function () {
+        assignarJutge(3, $(this).val());
     });
     $("#categoria").on("change", function () {
     if ($(this).val() != "0") {
@@ -140,6 +156,7 @@ window.onload = function () {
         }
     });
     $("#subcategoria").on("change", function () {
+        actualitzarCategoriaid();
     });
 
     $('#esborrarBloc').click(function () {
@@ -167,7 +184,9 @@ class Blocs {
                     bloc.classList.remove('bloc--active');
                 });
                 $('#bloc' + bloc.id).addClass('bloc--active');
+                timeInit = true;
                 mostrarBloc(event);
+                countDown();
             });
         });
         //Boto afegir bloc alinetat a la dreta
@@ -219,11 +238,19 @@ function obtenirJutges() {
         }
     });
     return $.ajax({
-        url: '/jutgesBlocs',
+        url: '/obtenirJutges',
         type: 'POST',
         dataType: 'json',
         success: function (data) {
-            jutges = data;
+            for (let i = 0; i < data.length; i++){
+                let opcio = document.createElement("option");
+                opcio.className = "opcioJutge";
+                opcio.value = data[i].id;
+                opcio.text = data[i].name; //Resolució Temporal
+                for (let j = 1; j <= 3; j++){
+                    $('#jutge' + j).append(opcio.cloneNode(true));
+                }
+            }
         },
         error: function (data) {
             //Add wait time for toast while it is shown
@@ -428,6 +455,7 @@ function comprovarModalitat(modalitat){
 function comprovaSubcategoria(subcategoria){
     if (subcategoria == "C0"){
         $('#subcategoria').val(1).change();
+        actualitzarCategoriaid();
     } else if (subcategoria == "C1"){
         $('#subcategoria').val(2).change();
     } else if (subcategoria == "C2"){
@@ -481,6 +509,7 @@ function activarBloc(){
     }
 }
 function assignarJutge(pos, id){
+    if (timeInit) return;
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -492,12 +521,88 @@ function assignarJutge(pos, id){
         dataType: 'json',
         data: {
             id: $('#idBloc').val(),
-            pos: pos,
-            jutge: id
+            pos: pos - 1,
+            jutge_id: id
         },
         success: function (data) {
             document.getElementById('textCorrecte').innerHTML = data.data;
             toastSuccess.show();
+            switch (pos){
+                case 3:
+                    break;
+                case 2:
+                    if(id == 0){
+                        $("#jutge3").prop("disabled", true);
+                        $("#jutge3").val(0).change();
+                    } else {
+                        $("#jutge3").prop("disabled", false);
+                    }
+                    break;
+                case 1:
+                    if(id == 0){
+                        $("#jutge2").prop("disabled", true);
+                        $("#jutge3").prop("disabled", true);
+                        $("#jutge2").val(0).change();
+                        $("#jutge3").val(0).change();
+                    } else {
+                        $("#jutge2").prop("disabled", false);
+                    }
+                    break;    
+            }
         }
     });
+}
+
+function actualitzarCategoriaid(){
+    if (timeInit) return
+    let categoria = $('#categoria').val();
+    let modalitat = $('#modalitat').val();
+    let estils = $('#estils').val();
+    let subcategoria = $('#subcategoria').val();
+    let id = $('#idBloc').val();
+    if (categoria != 0 && modalitat != 0 && estils != 0 && subcategoria != 0){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '/actualitzarBlocCategoria',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id,
+                categoria: categoria,
+                modalitat: modalitat,
+                estils: estils,
+                subcategoria: subcategoria
+            },
+            success: function (data) {
+                document.getElementById('textCorrecte').innerHTML = data.data;
+                toastSuccess.show();
+            }
+        });
+    }
+}
+function countDown() {
+    setTimeout(function () {
+        timeInit = false;
+        if ($("#jutge1").val() != 0){
+            $("#jutge2").prop("disabled", false);
+        }
+        if ($("#jutge2").val() == 0){
+            $("#jutge3").prop("disabled", true);
+        } else {
+            $("#jutge3").prop("disabled", false);
+        }
+        if ($("#categoria").val() == 0){
+            $("#modalitat").prop("disabled", true);
+        }
+        if ($("#modalitat").val() == 0){
+            $("#estils").prop("disabled", true);
+        }
+        if ($("#estils").val() == 0){
+            $("#subcategoria").prop("disabled", true);
+        }
+    }, 300);
 }

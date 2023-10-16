@@ -54,6 +54,9 @@ class Blocs extends Controller
         $blocsActius = [];
         foreach($blocs as $bloc){
             $blocJutge = ModelBlocs_Jutges::where('bloc_id', $bloc->id)->where('jutge_id', $idJutge);
+            $pases = ModelParticipacions::where('categoria_id', $bloc->categoria_id)->get();
+            $bloc->pases = $pases;
+            $bloc->jutge = $blocJutge;
             if($blocJutge != null){
                 $blocsActius[] = $bloc;
             }
@@ -64,6 +67,10 @@ class Blocs extends Controller
     public function esborrarBloc(Request $request){
         $id = $request->id;
         $bloc = ModelBlocs::find($id);
+        $blocJutges = ModelBlocs_Jutges::where('bloc_id', $id)->get();
+        foreach($blocJutges as $blocJutge){
+            $blocJutge->delete();
+        }
         $bloc->delete();
         $blocs = ModelBlocs::all();
         return response()->json($blocs, 200);
@@ -155,5 +162,93 @@ class Blocs extends Controller
             "data" => "S'ha deshabilitat el bloc"
         ];
         return response()->json($response, 200);
+    }
+
+    public function actualitzarBlocCategoria(Request $request){
+        $bloc = ModelBlocs::find($request->id);
+        switch($request->categoria){
+            case 1:
+                $categoria = "Amateur";
+                break;
+            case 2:
+                $categoria = "Pre-Professional";
+                break;
+            default:
+                $categoria = null;
+                break;
+        } switch($request->modalitat){
+            case 1:
+                $modalitat = "Solo";
+                break;
+            case 2:
+                if ($categoria == "Amateur"){
+                    $modalitat = "Duos/Trios";
+                } else {
+                    $modalitat = "Duet";
+                }
+                break;
+            case 3:
+                if ($categoria == "Amateur"){
+                    $modalitat = "Grupal";
+                } else {
+                    $modalitat = null;
+                }
+                break;
+            default:
+                $modalitat = null;
+                break;
+        } switch($request->estils){
+            case 1:
+                $estils = "Clàssic";
+                break;
+            case 2:
+                $estils = "Contemporani";
+                break;
+            case 3:
+                if ($categoria == "Amateur"){
+                    $estils = "Fusió";
+                } else {
+                    $estils = "Dues Variacions";
+                }
+                break;
+            case 4:
+                if ($categoria == "Amateur"){
+                    $estils = "Jazz";
+                } else {
+                    $estils = null;
+                }
+                break;
+            default:
+                $estils = null;
+                break;
+        }
+        $subcategoria = "C" . ($request->subcategoria - 1); 
+        $categoria_id = ModelCategoria::where('categoria', $categoria)->where('modalitat', $modalitat)->where('estils', $estils)->where('subcategoria', $subcategoria)->first()->id;
+        if ($categoria_id == null){
+            $response = [
+                "success" => false,
+                "data" => "No s'ha trobat la categoria"
+            ];
+            return response()->json($response, 500);
+        }
+        $bloc->categoria_id = $categoria_id;
+        $bloc->save();
+        $response = [
+            "success" => true,
+            "data" => "S'ha actualitzat la categoria del bloc"
+        ];
+        return response()->json($response, 200);
+    }
+
+    public function assignarJutge(Request $request){
+            $bloc = ModelBlocs::find($request->id);
+            $blocJutge = ModelBlocs_Jutges::where('bloc_id', $bloc->id)->where('posicio', $request->pos)->first();
+            $blocJutge->jutge_id = $request->jutge_id != 0 ? $request->jutge_id : null;
+            $blocJutge->save();
+            $response = [
+                "success" => true,
+                "data" => "Jutge ". $request->jutge_id - 1 ." assignat al " . $bloc->nom
+            ];
+            return response()->json($response, 200);
     }
 }

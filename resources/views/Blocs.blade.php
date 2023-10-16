@@ -23,10 +23,10 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h2 data-header="h1" class="title my-5">Gestió de Blocs</h2>
+            <h2 data-header="h1" class="title my-4">Gestió de Blocs</h2>
             <div class="row">
                 <div class="card border-1 shadow rounded-3">
-                    <div class="card-body p-4">
+                    <div class="card-body p-2">
                         <div>
                             <ul class="nav nav-tabs" id="navBlocs" role="tablist">
                                 <script defer src="{{asset('js/Blocs.js')}}"></script>                                
@@ -69,17 +69,17 @@
                                     <h3>Jutges</h3>
                                     <br>
                                     <label for="jutge1" class="form-label">Jutge 1:</label>
-                                    <select class="form-select" id="jutge1" name="jutge1">
+                                    <select class="form-select" id="jutge1" class="jutgeBloc" name="jutge1" disabled="false">
                                         <option value="0">Selecciona un jutge</option>
                                     </select>
                                     <br>
                                     <label for="jutge2" class="form-label">Jutge 2:</label>
-                                    <select class="form-select" id="jutge2" name="jutge2">
+                                    <select class="form-select" id="jutge2" class="jutgeBloc" name="jutge2" disabled="true">
                                         <option value="0">Selecciona un jutge</option>
                                     </select>
                                     <br>
                                     <label for="jutge3" class="form-label">Jutge 3:</label>
-                                    <select class="form-select" id="jutge3" name="jutge3">
+                                    <select class="form-select" id="jutge3" class="jutgeBloc" name="jutge3" disabled="true">
                                         <option value="0">Selecciona un jutge</option>
                                     </select>
                                 </div>

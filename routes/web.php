@@ -71,5 +71,12 @@ Route::post('esborrarBloc', [App\Http\Controllers\Blocs::class, 'esborrarBloc'])
 Route::get('votacions', [App\Http\Controllers\Jutges::class, 'votacionsIndex'])->middleware('auth')->name('votacions');
 Route::post('obtenirBlocsActius', [App\Http\Controllers\Blocs::class, 'obtenirBlocsActius'])->name('obtenirBlocsActius');
 Route::post('obtenirJutges', [App\Http\Controllers\Jutges::class, 'obtenirJutges'])->name('obtenirJutges');
+Route::post('assignarJutge', [App\Http\Controllers\Blocs::class, 'assignarJutge'])->name('assignarJutge');
 Route::post('activarBloc', [App\Http\Controllers\Blocs::class, 'activarBloc'])->name('activarBloc');
 Route::post('desactivarBloc', [App\Http\Controllers\Blocs::class, 'desactivarBloc'])->name('desactivarBloc');
+Route::post('actualitzarBlocCategoria', [App\Http\Controllers\Blocs::class, 'actualitzarBlocCategoria'])->name('actualitzarBlocCategoria');
+
+Route::get('/logout', function() {
+    Auth::logout();
+    return;
+})->name('logout');
