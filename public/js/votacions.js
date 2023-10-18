@@ -1,5 +1,7 @@
+var blocs = [];
+var pasesXBloc = [];
 var pases = [];
-var paginaActual = 0; // Initialize with 0 to match array indexing
+var paginaActual = 0;
 
 $(document).ready(function() {
     $.ajaxSetup({
@@ -16,23 +18,33 @@ $(document).ready(function() {
             id: $("#idUsuari").val()
         },
         success: function(data) {
-            pases = data; // Store the retrieved pases
-            mostrarPase(paginaActual);
+            if (data.length == 0) {
+                if (navigator.language == "ca") {
+                    alert("No hi ha cap bloc actiu");
+                } else if (navigator.language == "es") {
+                    alert("No hay ningún bloque activo");
+                } else {
+                    alert("There is no active block");
+                }
+                window.location.href = "/";
+            }
+            blocs = data;
+            initBloc();
             console.log(data);
         }
     });
 });
 
-function mostrarPase(index) {
-    if (index >= 0 && index < pases.length) {
-        var pase = pases[index];
-        $("#nPase").html("Pase Nº " + pase.id);
-        $("#categoria").html(pase.categoria);
-        $("#edat").html(pase.edat);
-        // Add code for other fields
-        
-        // Example: $("#item1").html(pase.item1);
+function initBloc() {
+    for (var i = 0; i < blocs.length; i++) {
+        var pasesBloc = blocs[i].pases;
+        pasesXBloc.push(pasesBloc);
+        for (var j = 0; j < pasesBloc.length; j++) {
+            pases.push(pasesBloc[j]);
+        }
     }
+
+    mostrarPagina(1);
 }
 
 // Call this function to navigate to the next pase

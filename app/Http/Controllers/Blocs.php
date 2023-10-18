@@ -8,6 +8,7 @@ use App\Models\Categoria as ModelCategoria;
 use App\Models\Participacions as ModelParticipacions;
 use App\Models\User as ModelJutges;
 use App\Models\Blocs_Jutges as ModelBlocs_Jutges;
+use App\Models\Sistema_Puntuacio as ModelSistema_Puntuacio;
 use Dflydev\DotAccessData\Data;
 use Exception;
 
@@ -50,18 +51,26 @@ class Blocs extends Controller
 
     public function obtenirBlocsActius(Request $request){
         $idJutge = $request->id;
-        $blocs = ModelBlocs::where('actiu', '1')->with('categoria')->get();
-        $blocsActius = [];
-        foreach($blocs as $bloc){
-            $blocJutge = ModelBlocs_Jutges::where('bloc_id', $bloc->id)->where('jutge_id', $idJutge);
-            $pases = ModelParticipacions::where('categoria_id', $bloc->categoria_id)->get();
-            $bloc->pases = $pases;
-            $bloc->jutge = $blocJutge;
-            if($blocJutge != null){
-                $blocsActius[] = $bloc;
+        $blocs_jutge = ModelBlocs_Jutges::where('jutge_id',$idJutge)->get();
+        if (!$blocs_jutge){
+            return error(404);
+        };
+        $blocs = [];
+        foreach($blocs_jutge as $bloc_jutge){
+            $bloc = ModelBlocs::where('id', $bloc_jutge->bloc_id)->first();
+            if ($bloc->actiu == 1){
+                $participants = ModelParticipacions::where('categoria_id', $bloc->categoria_id)->get();
+                $categoria = ModelCategoria::where('id', $bloc->categoria_id)->first();
+                $bloc->pases = $participants;
+                    $bloc->punt1 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id1)->first()->nom;
+                    $bloc->punt2 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id2)->first()->nom;
+                    $bloc->punt3 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id3)->first()->nom;
+                    $bloc->punt4 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id4)->first()->nom;
+                    $bloc->punt5 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id5)->first()->nom;
+                $blocs[] = $bloc;
             }
-        }
-        return response()->json($blocsActius, 200);
+        };
+        return response()->json($blocs, 200);
     }
 
     public function esborrarBloc(Request $request){
