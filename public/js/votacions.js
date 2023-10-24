@@ -47,6 +47,11 @@ function initBloc() {
     mostrarPagina(1);
 }
 
+
+function mostrarPagina(nPag){
+    
+}
+
 // Call this function to navigate to the next pase
 function siguientePase() {
     if (paginaActual < pases.length - 1) {

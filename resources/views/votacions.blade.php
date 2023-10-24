@@ -110,10 +110,13 @@
                 <br>
                 <p>Puntuació Total: <span id="puntuacioTotal">0</span></p>
             </div>
-            <div class="col-4" >
+            <div class="col-2 offset-2" >
                 <button type="button" class="btn btn-primary" id="enviarVotacio">Enviar Votació</button>
             </div>
         </div>
+        <div class="row">
+            <div class="col-2">
+                <button id="btnAnterior" type="button" class="btn btn-primary">Anterior</button>
     </div>
 </div>
 @endsection
