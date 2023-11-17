@@ -9,9 +9,10 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('css/main.css') }}">
     <script src="{{ asset ('js/jquery.min.js')}}"></script>
     <script src="{{ asset('js/bootstrap.min.js')}}"></script>
-    <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/brands.css')}}" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/solid.css')}}" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/fontawesome.css')}}" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/fontawesome.min.css')}}" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/regular.min.css')}}" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/brands.min.css')}}" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ asset('fontawesome/css/solid.min.css')}}" rel="stylesheet">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="csrf-token" content="{{ csrf_token() }}">

@@ -106,7 +106,7 @@
         </div>
         <div class="mb-3"></div>
         <div class="row justify-content-between">
-            <div class="col-8">
+            <div class="col-lg-8 col-2">
                 <br>
                 <p>Puntuació Total: <span id="puntuacioTotal">0</span></p>
             </div>
@@ -114,9 +114,15 @@
                 <button type="button" class="btn btn-primary" id="enviarVotacio">Enviar Votació</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-2">
-                <button id="btnAnterior" type="button" class="btn btn-primary">Anterior</button>
+        <div class="row justify-content-between">
+            <div class="col-1">
+                <button id="btnAnterior" type="button" class="btn btn-outline-success"><i class="fa-solid fa-arrow-left" style="color: #63b876;"></i></button>
+            </div>
+            <div class="col-1 offset-10">
+                <button id="btnSeguent" type="button" class="btn btn-outline-success"><i class="fa-solid fa-arrow-right" style="color: #63b876;"></i></button>
+            </div>
+        </div>
+
     </div>
 </div>
 @endsection

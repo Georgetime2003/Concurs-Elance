@@ -9,6 +9,7 @@ use App\Models\Participacions as ModelParticipacions;
 use App\Models\User as ModelJutges;
 use App\Models\Blocs_Jutges as ModelBlocs_Jutges;
 use App\Models\Sistema_Puntuacio as ModelSistema_Puntuacio;
+use App\Models\Grups as ModelGrups;
 use Dflydev\DotAccessData\Data;
 use Exception;
 
@@ -60,6 +61,9 @@ class Blocs extends Controller
             $bloc = ModelBlocs::where('id', $bloc_jutge->bloc_id)->first();
             if ($bloc->actiu == 1){
                 $participants = ModelParticipacions::where('categoria_id', $bloc->categoria_id)->get();
+                foreach($participants as $participant){
+                    $participant->grup = ModelGrups::where('id', $participant->grup_id);
+                }
                 $categoria = ModelCategoria::where('id', $bloc->categoria_id)->first();
                 $bloc->pases = $participants;
                     $bloc->punt1 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id1)->first()->nom;
@@ -67,6 +71,10 @@ class Blocs extends Controller
                     $bloc->punt3 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id3)->first()->nom;
                     $bloc->punt4 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id4)->first()->nom;
                     $bloc->punt5 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id5)->first()->nom;
+                $bloc->categoria = ModelCategoria::where('id', $bloc->categoria_id)->first();
+                /* 
+                * Relació de dades amb les participacions com a pases per unificar puntuacions, puntuacions dels grups per posteriorment pujar la puntuació
+                */
                 $blocs[] = $bloc;
             }
         };
