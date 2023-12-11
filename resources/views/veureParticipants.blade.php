@@ -1,6 +1,11 @@
 @extends('layout')
 @section('header')
 <script src="{{asset('js/veureParticipants.js')}}"></script>
+<style>
+    #nomParticipant{
+        cursor: pointer;
+    }
+</style>
 @endsection
 @section('pagina')
 <div class="container">
@@ -40,13 +45,21 @@
                                                 <td>{{$participant->grups->id}}</td>
                                             </tr>
                                         @endforeach
-                                        
-
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="toast" class="toast align-items-center text-bg-success border-0 position-absolute my-3 top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-bs-delay="1800" style="width: 55px">
+    <div class="d-flex">
+        <div class="toast-body" id="textError">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
         </div>
     </div>

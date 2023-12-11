@@ -10,8 +10,13 @@ class Grups extends Model
     use HasFactory;
     protected $table = 'grups';
     protected $primaryKey = 'id';
+    protected $id = 'id';
     protected $fillable = [
         'nomgrup',
         'descripcio',
+        'participants'
+    ];
+    protected $participants = [
+        'participants'
     ];
 }

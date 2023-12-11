@@ -10,6 +10,7 @@ use App\Models\User as ModelJutges;
 use App\Models\Blocs_Jutges as ModelBlocs_Jutges;
 use App\Models\Sistema_Puntuacio as ModelSistema_Puntuacio;
 use App\Models\Grups as ModelGrups;
+use App\Models\Participants as ModelParticipants;
 use Dflydev\DotAccessData\Data;
 use Exception;
 
@@ -54,27 +55,45 @@ class Blocs extends Controller
         $idJutge = $request->id;
         $blocs_jutge = ModelBlocs_Jutges::where('jutge_id',$idJutge)->get();
         if (!$blocs_jutge){
-            return error(404);
+            return response("", 404);
         };
-        $blocs = [];
         foreach($blocs_jutge as $bloc_jutge){
+            $pases = 0;
             $bloc = ModelBlocs::where('id', $bloc_jutge->bloc_id)->first();
             if ($bloc->actiu == 1){
-                $participants = ModelParticipacions::where('categoria_id', $bloc->categoria_id)->get();
+                $participants = ModelParticipacions::where('categoria_id', $bloc->categoria_id)->orderBy('grup_id')->get();
+                $grups = [];
                 foreach($participants as $participant){
-                    $participant->grup = ModelGrups::where('id', $participant->grup_id);
+                    $grup = ModelGrups::where('id', $participant->grup_id)->first()->toArray();
+                    if(!isset($grups[$grup['id']])){
+                        if(isset($edat) && isset($nParticipants) && isset($idGrup)){
+                            $grups[$idGrup]['edat'] = $edat / $nParticipants;
+                        }
+                        $edat = 0;
+                        $nParticipants = 0;
+                        $idGrup = $grup['id'];
+                        $grups[$grup['id']] = $grup;
+                        $grups[$grup['id']]['participants'] = [];
+                        $pases++;
+                    }
+                    $grups[$grup['id']]['participants'][] = ModelParticipants::where('id', $participant->participant_id)->first()->toArray();
+                    $edat = $edat + ModelParticipants::where('id', $participant->participant_id)->first()->edat;
+                    $nParticipants++;
                 }
+                $bloc->grups = array_values($grups);
+                $bloc->pases = $pases;
                 $categoria = ModelCategoria::where('id', $bloc->categoria_id)->first();
-                $bloc->pases = $participants;
-                    $bloc->punt1 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id1)->first()->nom;
-                    $bloc->punt2 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id2)->first()->nom;
-                    $bloc->punt3 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id3)->first()->nom;
-                    $bloc->punt4 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id4)->first()->nom;
-                    $bloc->punt5 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id5)->first()->nom;
-                $bloc->categoria = ModelCategoria::where('id', $bloc->categoria_id)->first();
-                /* 
-                * Relació de dades amb les participacions com a pases per unificar puntuacions, puntuacions dels grups per posteriorment pujar la puntuació
-                */
+                $bloc->categoria = $categoria;
+                $sistemaPuntuacio1 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id1)->first()->nom;
+                $bloc->sistema_puntuacio1 = $sistemaPuntuacio1;
+                $sistemaPuntuacio2 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id2)->first()->nom;
+                $bloc->sistema_puntuacio2 = $sistemaPuntuacio2;
+                $sistemaPuntuacio3 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id3)->first()->nom;
+                $bloc->sistema_puntuacio3 = $sistemaPuntuacio3;
+                $sistemaPuntuacio4 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id4)->first()->nom;
+                $bloc->sistema_puntuacio4 = $sistemaPuntuacio4;
+                $sistemaPuntuacio5 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id5)->first()->nom;
+                $bloc->sistema_puntuacio5 = $sistemaPuntuacio5;
                 $blocs[] = $bloc;
             }
         };
