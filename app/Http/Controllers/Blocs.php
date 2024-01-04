@@ -11,8 +11,11 @@ use App\Models\Blocs_Jutges as ModelBlocs_Jutges;
 use App\Models\Sistema_Puntuacio as ModelSistema_Puntuacio;
 use App\Models\Grups as ModelGrups;
 use App\Models\Participants as ModelParticipants;
+use Illuminate\Support\Facades\Auth;
 use Dflydev\DotAccessData\Data;
 use Exception;
+
+use function Laravel\Prompts\error;
 
 class Blocs extends Controller
 {
@@ -94,6 +97,7 @@ class Blocs extends Controller
                 $bloc->sistema_puntuacio4 = $sistemaPuntuacio4;
                 $sistemaPuntuacio5 = ModelSistema_Puntuacio::where('id', $categoria->sistema_puntuacio_id5)->first()->nom;
                 $bloc->sistema_puntuacio5 = $sistemaPuntuacio5;
+                $bloc->nJutge = ModelBlocs_Jutges::where('bloc_id', $bloc->id)->where('jutge_id', $idJutge)->first()->posicio + 1;
                 $blocs[] = $bloc;
             }
         };
@@ -181,6 +185,21 @@ class Blocs extends Controller
     public function activarBloc(Request $request){
         $bloc = ModelBlocs::find($request->id);
         $bloc->actiu = 1;
+        $participants = ModelParticipacions::all();
+        $nPase = ModelGrups::orderBy('nPase', 'desc')->first()->nPase;
+        if ($nPase == null){
+            $nPase = 1;
+        } else {
+            $nPase++;
+        }
+        foreach($participants as $participant){
+            $grup = ModelGrups::where('id', $participant->grup_id)->first();
+            if ($grup->nPase == null){
+                $grup->nPase = $nPase;
+                $grup->save();
+                $nPase++;
+            }
+        }
         $bloc->save();
         $response = [
             "success" => true,
@@ -286,5 +305,58 @@ class Blocs extends Controller
                 "data" => "Jutge ". $request->jutge_id - 1 ." assignat al " . $bloc->nom
             ];
             return response()->json($response, 200);
+    }
+
+    public function enviarVotacio(Request $request){
+        $bloc = ModelBlocs::find($request->idBloc)->first();
+        $grup = ModelGrups::where('id', $request->idPase)->first();
+        $blocJutge = ModelBlocs_Jutges::where('bloc_id', $bloc->id)->where('posicio', $request->nJutge)->where('jutge_id', Auth::user()->id)->first();
+        if (!isset($blocJutge)){
+            $response = [
+                "error" => "forbidden",
+                "bloc" => $bloc,
+                "grup" => $grup,
+                "blocJutge" => $blocJutge
+            ];
+            return response()->json($response, 403);
+        }
+        switch ($request->nJutge){
+            case 0:
+                $grup->puntuacio1_1 = $request->puntuacio1;
+                $grup->puntuacio2_1 = $request->puntuacio2;
+                $grup->puntuacio3_1 = $request->puntuacio3;
+                $grup->puntuacio4_1 = $request->puntuacio4;
+                $grup->puntuacio5_1 = $request->puntuacio5;
+                break;
+            case 1:
+                $grup->puntuacio1_2 = $request->puntuacio1;
+                $grup->puntuacio2_2 = $request->puntuacio2;
+                $grup->puntuacio3_2 = $request->puntuacio3;
+                $grup->puntuacio4_2 = $request->puntuacio4;
+                $grup->puntuacio5_2 = $request->puntuacio5;
+                break;
+            case 2:
+                $grup->puntuacio1_3 = $request->puntuacio1;
+                $grup->puntuacio2_3 = $request->puntuacio2;
+                $grup->puntuacio3_3 = $request->puntuacio3;
+                $grup->puntuacio4_3 = $request->puntuacio4;
+                $grup->puntuacio5_3 = $request->puntuacio5;
+                break;
+            default:
+                return error(500, "No s'ha pogut enviar la votació, " . $request->nJutge);
+        }
+        if ($grup->puntuacio1_1 != null && $grup->puntuacio1_2 != null && $grup->puntuacio1_3 != null && $grup->puntuacio2_1 != null && $grup->puntuacio2_2 != null && $grup->puntuacio2_3 != null && $grup->puntuacio3_1 != null && $grup->puntuacio3_2 != null && $grup->puntuacio3_3 != null && $grup->puntuacio4_1 != null && $grup->puntuacio4_2 != null && $grup->puntuacio4_3 != null && $grup->puntuacio5_1 != null && $grup->puntuacio5_2 != null && $grup->puntuacio5_3 != null) {
+            $puntuaciofinal1 = ($grup->puntuacio1_1 + $grup->puntuacio2_2 + $grup->puntuacio3_1 + $grup->puntuacio4_1 + $grup->puntuacio5_1) / 5;
+            $puntuaciofinal2 = ($grup->puntuacio1_2 + $grup->puntuacio2_2 + $grup->puntuacio3_2 + $grup->puntuacio4_2 + $grup->puntuacio5_2) / 5;
+            $puntuaciofinal3 = ($grup->puntuacio1_3 + $grup->puntuacio2_3 + $grup->puntuacio3_3 + $grup->puntuacio4_3 + $grup->puntuacio5_3) / 5;
+            $grup->puntuaciofinal = ($puntuaciofinal1 + $puntuaciofinal2 + $puntuaciofinal3) / 3;
+        }
+        $grup->save();
+        $response = [
+            "success" => true,
+            "data" => "Votació enviada",
+            "grup" => $grup
+        ];
+        return response()->json($response, 200);
     }
 }

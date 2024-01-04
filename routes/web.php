@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,8 +76,9 @@ Route::post('assignarJutge', [App\Http\Controllers\Blocs::class, 'assignarJutge'
 Route::post('activarBloc', [App\Http\Controllers\Blocs::class, 'activarBloc'])->name('activarBloc');
 Route::post('desactivarBloc', [App\Http\Controllers\Blocs::class, 'desactivarBloc'])->name('desactivarBloc');
 Route::post('actualitzarBlocCategoria', [App\Http\Controllers\Blocs::class, 'actualitzarBlocCategoria'])->name('actualitzarBlocCategoria');
+Route::post('enviarVotacio', [App\Http\Controllers\Blocs::class, 'enviarVotacio'])->name('enviarVotacio');
 
 Route::get('/logout', function() {
     Auth::logout();
-    return;
+    return redirect()->route('index');
 })->name('logout');

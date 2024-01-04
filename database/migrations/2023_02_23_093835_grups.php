@@ -38,6 +38,8 @@ return new class extends Migration
 
             $table->float('puntuaciofinal')->nullable();
 
+            $table->integer('nPase')->nullable();
+
             $table->timestamps();
         });
     }

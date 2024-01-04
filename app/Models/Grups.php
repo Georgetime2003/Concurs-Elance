@@ -14,7 +14,24 @@ class Grups extends Model
     protected $fillable = [
         'nomgrup',
         'descripcio',
-        'participants'
+        'participants',
+        'nPase',
+        'puntuacio1_1',
+        'puntuacio1_2',
+        'puntuacio1_3',
+        'puntuacio2_1',
+        'puntuacio2_2',
+        'puntuacio2_3',
+        'puntuacio3_1',
+        'puntuacio3_2',
+        'puntuacio3_3',
+        'puntuacio4_1',
+        'puntuacio4_2',
+        'puntuacio4_3',
+        'puntuacio5_1',
+        'puntuacio5_2',
+        'puntuacio5_3',
+        'puntuaciofinal'
     ];
     protected $participants = [
         'participants'

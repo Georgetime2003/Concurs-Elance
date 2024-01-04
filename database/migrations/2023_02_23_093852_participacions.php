@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('grup_id')->constrained('grups');
             $table->foreignId('categoria_id')->constrained('categories');
             $table->foreignId('participant_id')->constrained('participants');
-            $table->integer('nOrdre')->nullable();
 
             $table->timestamps();
         });

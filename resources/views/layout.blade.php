@@ -20,16 +20,16 @@
             <a class="nav-link active" aria-current="page" href="inici"><i class="fa-solid fa-home"></i> Inici</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="dashboard"><i class="fa-solid fa-upload"></i> Importar Participants</a>
+            <a class="nav-link" href="importacio"><i class="fa-solid fa-upload"></i> Importar Participants</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="dashboard"><i class="fa-solid fa-user-plus"></i> Afegir Participants</a>
+            <a class="nav-link" href="participants"><i class="fa-solid fa-user-plus"></i> Afegir Participants</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="dashboard"><i class="fa-solid fa-table"></i> Veure Participants</a>
+            <a class="nav-link" href="veureparticipants"><i class="fa-solid fa-table"></i> Veure Participants</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="dashboard"><i class="fa-solid fa-arrow-down-1-9"></i> Gestionar Blocs</a>
+            <a class="nav-link" href="blocs"><i class="fa-solid fa-arrow-down-1-9"></i> Gestionar Blocs</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="dashboard"><i class="fa-solid fa-trophy"></i> Veure Resultats</a>

@@ -47,7 +47,7 @@
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <!-- Track color gradient -->
-                        <input type="range" class="form-range colorRang" id="item1Val" min="0" max="10" step="0.5" value="0">
+                        <input type="range" class="form-range colorRang" id="item1Val" min="0" max="10" step="0.1" value="0">
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <p id="item1ValText">0</p>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <!-- Track color gradient -->
-                        <input type="range" class="form-range colorRang" id="item2Val" min="0" max="10" step="0.5" value="0">
+                        <input type="range" class="form-range colorRang" id="item2Val" min="0" max="10" step="0.1" value="0">
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <p id="item2ValText">0</p>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <!-- Track color gradient -->
-                        <input type="range" class="form-range colorRang" id="item3Val" min="0" max="10" step="0.5" value="0">
+                        <input type="range" class="form-range colorRang" id="item3Val" min="0" max="10" step="0.1" value="0">
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <p id="item3ValText">0</p>
@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <!-- Track color gradient -->
-                        <input type="range" class="form-range colorRang" id="item4Val" min="0" max="10" step="0.5" value="0">
+                        <input type="range" class="form-range colorRang" id="item4Val" min="0" max="10" step="0.1" value="0">
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <p id="item4ValText">0</p>
@@ -95,10 +95,16 @@
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <!-- Track color gradient -->
-                        <input type="range" class="form-range colorRang" id="item5Val" min="0" max="10" step="0.5" value="0">
+                        <input type="range" class="form-range colorRang" id="item5Val" min="0" max="10" step="0.1" value="0">
                     </div>
                     <div class="col-lg-3 col-11 offset-1">
                         <p id="item5ValText">0</p>
+                    </div>
+                    <div class="col-lg-8 col-2">
+                        <br/>
+                        <a id="puntuacioFinal">Puntuació Final: </a>
+                        <span id="puntuacioFinalText">0</span>
+                        <br/>
                     </div>
                 </div>
                 </form>
@@ -106,14 +112,11 @@
         </div>
         <div class="mb-3"></div>
         <div class="row justify-content-between">
-            <div class="col-lg-8 col-2">
-                <br>
-                <p>Puntuació Total: <span id="puntuacioTotal">0</span></p>
-            </div>
-            <div class="col-2 offset-2" >
+            <div class="col-2 offset-10" >
                 <button type="button" class="btn btn-primary" id="enviarVotacio">Enviar Votació</button>
             </div>
         </div>
+        <div class="mb-3"></div>
         <div class="row justify-content-between">
             <div class="col-1">
                 <button id="btnAnterior" type="button" class="btn btn-outline-success"><i class="fa-solid fa-arrow-left" style="color: #63b876;"></i></button>
